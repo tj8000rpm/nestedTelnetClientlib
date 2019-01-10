@@ -18,13 +18,13 @@
 
 ## 使い方
 - ``sample.py``を主に参照。
-- static methodである``connectWithTelnet``, ``writeACommandAndGetResultSTDOUT``だけを使えばOK。
+- ``NestedTelnetClient``インスタンスを生成する
+- ``NestedTelnetClient``インスタンスのmethodである``connectWithTelnet``, ``writeACommandAndGetResultSTDOUT``だけを使えばOK。
 - 最初の踏み台サーバのみ,python独自のtelnetlibを用いる
 - それ以降の踏み台or最終目的サーバには``telnet``コマンドを順次打っていくだけです。
 
-1. 最初の踏み台サーバにアクセスするときのみ、``connectWithTelnet``の``telnetInstance``引数に``None``を指定するか、引数を指定しないでください。
-2. 1の``connectWithTelnet``の戻り値である``telnetlib``のインスタンスを以後の踏み台or最終目的サーバに接続するまで``connectWithTelnet``の``telnetInstance``引数に指定し続けてください。
-3. 途中の踏み台を含め、コマンドを実行したい場合は``writeACommandAndGetResultSTDOUT``コマンドを用い、引数``telnetInstance``に上述の``telnetlib``インスタンスを指定してください。
+1. 踏み台サーバ/２つめ以降の踏み台/目的サーバにアクセスするときも、同じ``connectWithTelnet``を使用します。
+2. 途中の踏み台を含め、コマンドを実行したい場合は``writeACommandAndGetResultSTDOUT``コマンドを用い、引数``telnetInstance``に上述の``telnetlib``インスタンスを指定してください。
 
 - 当然ですが、踏み台の途中のサーバに、その踏み台以降のサーバにいる場合に途中でコマンドを投入することはできません。
 - Nestedした場合、自分がいまどこのサーバにいるのかは常に気をつけてください・・・（対象確認！ヨシ！）
