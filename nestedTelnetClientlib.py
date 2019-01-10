@@ -4,6 +4,8 @@ import telnetlib
 class NestedTelnetClient(object):
     def __init__(self):
         self.telnetInstance=None
+        self.connectionHistory=[]
+        self.commandHistory=[]
 
     def connectWithTelnet(self, tuple_host_port, user, passwd, wait, encoding='euc-jp'):
         '''Connecting to the remote server/switch with telnet.
@@ -39,10 +41,11 @@ class NestedTelnetClient(object):
 
         # in case argument telnetInstance is not exist, create new telnet session
         if not telnetInstance:
-            telnetInstance=telnetlib.Telnet(host, )
+            telnetInstance=telnetlib.Telnet(host, port)
         # in case argument telnetInstance is existed, send telnet command
         else:
             telnetInstance.write('telnet {} {}\n'.format(host,port).encode(encoding))
+        self.connectionHistory.append((host, port, user, passwd, wait, encoding))
 
         telnetInstance.read_until(b'login')
         telnetInstance.write((user+'\n').encode(encoding))
@@ -72,6 +75,33 @@ class NestedTelnetClient(object):
         output=telnetInstance.read_until(wait.encode(encoding))
         output=output.decode(encoding)
         outputs=output.split('\r\n')[1:-1]  # strip written command and end line of waiitng prompt
+        self.commandHistory.append((self.getDepth(), command))
+        return outputs
+
+    def getDepth(self):
+        '''Get a currentry nested depth
+        
+        Arguments:
+        - void
+
+        Returned:
+        - : A length of list are returend
+        '''
+        return len(self.connectionHistory)
+
+    def getCommandHistory(self):
+        '''Get the history of written commands
+        
+        Arguments:
+        - void
+
+        Returned:
+        - outputs : A list of string of command result on telnet console stdout, it was separated with ``\r\n``.
+        '''
+        outputs=[]
+        for depth, command in self.commandHistory:
+            host, port, user, passwd, wait, encoding=self.connectionHistory[depth-1]
+            outputs.append('{}\t{}@{}:{}\t{}'.format(depth, user, host, port, command))
         return outputs
 
 def printOutputs(outputs):

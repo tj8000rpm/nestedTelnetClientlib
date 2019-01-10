@@ -38,7 +38,7 @@ hosts=[
     ]}
 ]
 
-# this initialization is very important!
+# create a new Client instance
 tn=nestedTelnetClientlib.NestedTelnetClient()
 
 exit_prompt=[]
@@ -55,6 +55,10 @@ for target in hosts:
     for command in commands:
         outputs=tn.writeACommandAndGetResultSTDOUT(command, prompt)
         nestedTelnetClientlib.printOutputs(outputs)
+
+# get command history
+outputs=tn.getCommandHistory()
+nestedTelnetClientlib.printOutputs(outputs)
 
 # graceful exit
 exit_prompt.append('')
