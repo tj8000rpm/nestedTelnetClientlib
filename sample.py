@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from nestedTelnetClientlib import NestedTelnetClient
+import nestedTelnetClientlib
 '''This is an example of using NestedTelnetClient
 
 global config of nested telnet nodes
@@ -39,7 +39,7 @@ hosts=[
 ]
 
 # this initialization is very important!
-tn=None
+tn=nestedTelnetClientlib.NestedTelnetClient()
 
 exit_prompt=[]
 
@@ -51,14 +51,14 @@ for target in hosts:
     prompt=target['prompt']
     exit_prompt.insert(0, prompt)
     commands=target['command']
-    tn=NestedTelnetClient.connectWithTelnet((host, 23), user, passwd, prompt, tn)
+    tn.connectWithTelnet((host, 23), user, passwd, prompt)
     for command in commands:
-        outputs=NestedTelnetClient.writeACommandAndGetResultSTDOUT(tn, command, prompt)
-        NestedTelnetClient.printOutputs(outputs)
+        outputs=tn.writeACommandAndGetResultSTDOUT(command, prompt)
+        nestedTelnetClientlib.printOutputs(outputs)
 
 # graceful exit
 exit_prompt.append('')
 exit_prompt=exit_prompt[1:]
 for prompt in exit_prompt:
-    NestedTelnetClient.writeACommandAndGetResultSTDOUT(tn, 'exit', prompt)
+    tn.writeACommandAndGetResultSTDOUT('exit', prompt)
 
