@@ -3,6 +3,13 @@
 - auther: @tj8000rpm
 - repository: https://github.com/tj8000rpm/nestedTelnetClientlib
 
+## Install手順
+
+```terminal
+git clone https://github.com/tj8000rpm/nestedTelnetClientlib
+cd nestedTelnetClientlib
+pip install -e .
+```
 
 ## 目的（独断と偏見による）
 - 超レガシーな運用をしている人たちには*未だに*(そしてオリンピック以後の当分の間) ``telnet`` は重要なアイテムだ。
@@ -34,4 +41,3 @@
 - rhel系/debian系/busyboxのtelnetサーバにしか今の所対応してないです。
  - 正確には確認してないです
 - Unix系/switch系/交換機系等々の場合はカスタマイズが入りそうです
-- setup.pyとかは無いので自分でライブラリディレクトリに配置するか、自分のスクリプトの横において使用ください。
